@@ -1,9 +1,10 @@
 angular.module('myApp.controllers', [])
 
 //TODO: Extend to handle errors
-.controller('BaseController', function ($scope, ViewName,
-    //ionicToast, 
-    $translate) {
+.controller('BaseController', function ($scope, ViewName
+    //, ionicToast
+    //, $translate
+    ) {
     if (window.cordova) {
         $scope.$on('$ionicView.enter', function () {
             //to be added with analytics
@@ -18,12 +19,16 @@ angular.module('myApp.controllers', [])
 
 .controller('DashCtrl', function ($scope, $state, $rootScope,
     //ionicToast,
-    FeaturedDealFactory, $ionicLoading, $controller, $translate) {
+    FeaturedDealFactory, $ionicLoading, $controller) {
     angular.extend(this, $controller('BaseController', { $scope: $scope, ViewName: 'Featured Deals' }));
 
     $scope.MessageValidation = false;
+   
     $scope.scdata = $rootScope.scdata;
     delete $rootScope.scdata;
+    $scope.$on('$ionicView.enter', function () {
+        FeaturedDealFactory.getAll()
+    });
 
 })
 

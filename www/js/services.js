@@ -1,7 +1,10 @@
+var getCallsInprogress = [];
+
 angular.module('myApp.services', [])
 
 
 .service('APIFactory', function ($http, $resource, $q, LocalStorageService, DB_CONSTANTS, AccessTokenService, $rootScope) {
+    LocalStorageService.clear();
     return {
         getAuth: function (path, headerData) {
             var deferred = $q.defer();
@@ -59,7 +62,9 @@ angular.module('myApp.services', [])
 
                 $http.defaults.headers.common.AccessToken = AccessTokenService.get();
 
-                path = LocalStorageService.get(DB_CONSTANTS.dbRoutePath) + path;
+                //path = LocalStorageService.get(DB_CONSTANTS.dbRoutePath) + path;
+
+                path = 'http://localhost:61832' + path;
                 var postApiCall = $resource(path, {}, { 'save': { method: 'POST', timeout: 120000 } });
 
                 postApiCall.save(postData,
@@ -166,9 +171,7 @@ angular.module('myApp.services', [])
         }
     }
 })
-
-.factory('GoogleMaps', function ($cordovaGeolocation, $ionicLoading,
-$rootScope, $cordovaNetwork, Markers, ConnectivityMonitor) {
+.factory('GoogleMaps', function ($cordovaGeolocation, $ionicLoading, $rootScope, $cordovaNetwork, Markers, ConnectivityMonitor) {
 
     var markerCache = [];
     var apiKey = false;
@@ -504,10 +507,31 @@ $rootScope, $cordovaNetwork, Markers, ConnectivityMonitor) {
 
 .service('FeaturedDealFactory', function (APIFactory, API_PATHS, $q) {
     return {
-        FeaturedDeals: function (data) {
+        getAll: function () {
+            var promise = APIFactory.getAuth(API_PATHS.FEATURED_DEALS, {}).then(
+                function (data) {
+                    LocalStorageService.setObject(DB_CONSTANTS.dbProfileString, data);
+                },
+                function (error) {
+                    return $q.reject(error);
+                });
+
+            promise.success = function (fn) {
+                promise.then(fn);
+                return promise;
+            };
+
+            promise.error = function (fn) {
+                promise.then(null, fn);
+                return promise;
+            };
+
+            return promise;
+        },
+        save: function (data) {
             var promise = APIFactory.postAuth(API_PATHS.FEATURED_DEALS, data).then(
                 function (data) {
-                    return $q.resolve(data);
+                    LocalStorageService.setObject(DB_CONSTANTS.dbProfileString, data);
                 },
                 function (error) {
                     return $q.reject(error);
@@ -553,6 +577,17 @@ $rootScope, $cordovaNetwork, Markers, ConnectivityMonitor) {
                 return false;
             }
             return true;
+        }
+    };
+})
+
+.factory('AccessTokenService', function (LocalStorageService, DB_CONSTANTS) {
+    return {
+        get: function () {
+            return LocalStorageService.get(DB_CONSTANTS.dbAccessToken);
+        },
+        set: function (value) {
+            LocalStorageService.set(DB_CONSTANTS.dbAccessToken, value);
         }
     };
 })

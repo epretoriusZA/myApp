@@ -81,15 +81,13 @@ angular.module('myApp', ['ionic', 'ngCordova','ngResource', 'myApp.controllers',
     //'GoogleAnalytics': 'UA-46169857-8'
 })
 .constant('API_PATHS', {
-    //Prod
-    //'CENTRAL_ROOT': 'https://api-mobi-central.hellodoctor.com',
     //UAT
-    'CENTRAL_ROOT': 'http://api-central-mobi-dev.hellodoctor.com/',
+    'CENTRAL_ROOT': 'http://localhost:61832',
     //'CENTRAL_ROOT': 'http://10.3.226.86/MOBILE.API.CENTRAL',
     'CHANGE_PASSWORD': '/changepassword',
     'LOGIN_PATH': '/Login',
     'TIPS_PATH': '/Tips',
-    'FEATURED_DEALS': '/FeaturedDeals',
+    'FEATURED_DEALS': '/api/featureddeals',
     
 })
 
