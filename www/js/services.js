@@ -17,7 +17,10 @@ angular.module('myApp.services', [])
 
                 $http.defaults.headers.common.AccessToken = AccessTokenService.get();
 
-                path = LocalStorageService.get(DB_CONSTANTS.dbRoutePath) + path;
+                //path = LocalStorageService.get(DB_CONSTANTS.dbRoutePath) + path;
+
+                //path = 'http://41.185.30.193' + path;
+                path = 'http://localhost:61832' + path;
                 var apiCall = $resource(path, {}, { 'get': { timeout: 60000 } });
 
                 apiCall.get(headerData,
@@ -64,6 +67,7 @@ angular.module('myApp.services', [])
 
                 //path = LocalStorageService.get(DB_CONSTANTS.dbRoutePath) + path;
 
+                //path = 'http://41.185.30.193' + path;
                 path = 'http://localhost:61832' + path;
                 var postApiCall = $resource(path, {}, { 'save': { method: 'POST', timeout: 120000 } });
 
@@ -96,7 +100,11 @@ angular.module('myApp.services', [])
         get: function (path, headerData) {
             var deferred = $q.defer();
 
-            path = LocalStorageService.get(DB_CONSTANTS.dbRoutePath) + path;
+            //path = LocalStorageService.get(DB_CONSTANTS.dbRoutePath) + path;
+
+            // path = 'http://41.185.30.193' + path;
+
+            path = 'http://localhost:61832' + path;
             var postApiCall = $resource(path, {}, { 'get': { timeout: 20000 } });
 
             postApiCall.get(headerData,
@@ -505,12 +513,12 @@ angular.module('myApp.services', [])
     };
 })
 
-.service('FeaturedDealFactory', function (APIFactory, API_PATHS, $q) {
+.service('FeaturedDealFactory', function (APIFactory, API_PATHS, $q, LocalStorageService, DB_CONSTANTS) {
     return {
         getAll: function () {
             var promise = APIFactory.getAuth(API_PATHS.FEATURED_DEALS, {}).then(
                 function (data) {
-                    LocalStorageService.setObject(DB_CONSTANTS.dbProfileString, data);
+                    LocalStorageService.setObject(DB_CONSTANTS.dbFeaturedDeals, data);
                 },
                 function (error) {
                     return $q.reject(error);

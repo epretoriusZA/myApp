@@ -40,6 +40,16 @@ angular.module('myApp', ['ionic', 'ngCordova','ngResource', 'myApp.controllers',
 
     $stateProvider
 
+ 
+    .state('loading', {
+        url: '/0',
+        //abstract: true,
+        cache: false,
+        templateUrl: 'screens/loading.html',
+        controller: 'LoadingController'
+    })
+
+  // Each tab has its own nav history stack:
   // setup an abstract state for the tabs directive
     .state('tab', {
         url: '/tab',
@@ -47,8 +57,6 @@ angular.module('myApp', ['ionic', 'ngCordova','ngResource', 'myApp.controllers',
         cache: false,
         templateUrl: 'screens/tabs.html'
     })
-
-  // Each tab has its own nav history stack:
 
   .state('tab.dash', {
       url: '/dash',
@@ -70,7 +78,7 @@ angular.module('myApp', ['ionic', 'ngCordova','ngResource', 'myApp.controllers',
     })
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/tab/dash');
+    $urlRouterProvider.otherwise('/0');
 
 })
 .constant('CONFIGS', {
@@ -82,12 +90,12 @@ angular.module('myApp', ['ionic', 'ngCordova','ngResource', 'myApp.controllers',
 })
 .constant('API_PATHS', {
     //UAT
-    'CENTRAL_ROOT': 'http://localhost:61832',
+    'CENTRAL_ROOT': 'http://41.185.30.193',
     //'CENTRAL_ROOT': 'http://10.3.226.86/MOBILE.API.CENTRAL',
     'CHANGE_PASSWORD': '/changepassword',
     'LOGIN_PATH': '/Login',
-    'TIPS_PATH': '/Tips',
-    'FEATURED_DEALS': '/api/featureddeals',
+    'FEATURED_DEALS': '/featured/deals',
+    'DEALS_Path': '/deal/deals',
     
 })
 
@@ -102,7 +110,7 @@ angular.module('myApp', ['ionic', 'ngCordova','ngResource', 'myApp.controllers',
     'dbRoutePath': 'dbRoutePath',
     'dbAccessToken': 'dbAccessToken',
     'dbLoginCountry': 'dbLoginCountry',
-    'dbHealthTipCounter': 'dbHealthTipCounter',
+    'dbFeaturedDeals': 'dbFeaturedDeals',
     'dbMessageCounter': 'dbMessageCounter'
 })
 
